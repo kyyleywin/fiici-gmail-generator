@@ -975,15 +975,6 @@ const NAME_POOL = [
 ];
 /* ── Pool Nama Depan & Nama Belakang (identitas untuk isi form Nama saat login Gmail),
    TERPISAH dari NAME_POOL di atas (yang dipakai untuk bagian username/alamat email). ── */
-const FIRST_NAME_POOL = [
-  'Andi','Budi','Citra','Dewi','Eka','Fajar','Gita','Hendra','Indra','Joko',
-  'Kurnia','Lestari','Maya','Nanda','Oktavia','Putra','Putri','Rendra','Sari','Tono',
-  'Umar','Vina','Wahyu','Yanto','Zaskia','Agus','Bayu','Cahya','Dian','Erlangga',
-  'Fitri','Gunawan','Hana','Ivan','Julia','Kevin','Laila','Made','Nadia','Oscar',
-  'Prasetyo','Ratna','Surya','Taufik','Utami','Vera','Wulan','Yudha','Zainal','Ade',
-  'Bella','Cindy','Dedi','Elsa','Farhan','Gilang','Hesti','Ika','Jason','Karin',
-  'Lukman','Mira','Nugroho','Olivia','Panji','Rian','Salsa','Teguh','Vino','Winda'
-];
 const LAST_NAME_POOL = [
   'Saputra','Wijaya','Kusuma','Pratama','Santoso','Hidayat','Kurniawan','Setiawan','Firmansyah','Gunawan',
   'Permadi','Utomo','Nugraha','Suryanto','Wibowo','Handoko','Yulianto','Wardana','Susanto','Kusnadi',
@@ -992,6 +983,7 @@ const LAST_NAME_POOL = [
   'Lubis','Panjaitan','Simanjuntak','Marpaung','Sihombing','Batubara','Harahap','Damanik','Sitompul','Manurung'
 ];
 function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 
 /* ── Nama yang sudah dipakai pada email yang sudah Success/Disetor, disimpan permanen
    supaya nama itu tidak dipilih lagi walau emailnya nanti sudah otomatis terhapus
@@ -1042,8 +1034,8 @@ function generateEmails(){
       username=`${prefix}${picked.text}${suffix}`; address=`${username}@gmail.com`;
     }
     while(emails.some(e=>e.address===address));
-    const firstName = pickRandom(FIRST_NAME_POOL);
-    const lastName  = pickRandom(LAST_NAME_POOL);
+    const firstName = capitalize(baseName);
+    const lastName  = capitalize(pickRandom(LAST_NAME_POOL));
     const item = {id:crypto.randomUUID(),username,address,baseName,firstName,lastName,status:'created',saved:false,expired:false,expiredAt:null,disetor:false,disetorAt:null,createdAt:new Date()};
     emails.unshift(item);
     created.push(item);
