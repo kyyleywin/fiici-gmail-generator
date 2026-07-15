@@ -214,7 +214,7 @@
       <h2>Daftar Gmail</h2>
       <div class="row" style="margin-bottom:14px;">
         <div class="field">
-          <input type="text" id="searchBox" placeholder="Cari email, nama depan, atau nama belakang..." oninput="renderTable()">
+          <input type="text" id="searchBox" placeholder="Cari email atau username..." oninput="renderTable()">
         </div>
       </div>
       <div class="list-toolbar">
@@ -237,7 +237,7 @@
         <p class="small-note" style="margin-top:0;">Email yang sudah ditandai <b>Success</b> pada daftar email akan otomatis pindah dan terkunci di sini. Kalau akunnya tiba-tiba nonaktif/keluar sendiri, tandai <b>Session Expired</b>. Kalau aman, langsung <b>Setor</b> ke menu <b>Sudah Disetor</b>.</p>
         <div class="table-scroll">
           <table id="savedTable">
-            <thead><tr><th>Email</th><th>Status</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>Username</th><th>Email</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody id="savedTableBody"></tbody>
           </table>
         </div>
@@ -262,7 +262,7 @@
         <p class="small-note" style="margin-top:0;">Email yang ditandai <b>Session Expired</b> dari menu <b>Email Tersimpan</b> akan <b>otomatis terhapus permanen dalam 24 jam</b> kalau tidak segera di-<b>Setor</b> atau <b>Pulihkan</b> kembali ke Tersimpan.</p>
         <div class="table-scroll">
           <table id="expiredTable">
-            <thead><tr><th>Email</th><th>Ditandai Pada</th><th>Sisa Waktu</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>Username</th><th>Email</th><th>Ditandai Pada</th><th>Sisa Waktu</th><th>Aksi</th></tr></thead>
             <tbody id="expiredTableBody"></tbody>
           </table>
         </div>
@@ -277,7 +277,7 @@
         <p class="small-note" style="margin-top:0;">Email yang dipindahkan dari menu <b>Email Tersimpan</b> ke sini akan <b>otomatis terhapus setelah 15 hari</b> sejak dipindahkan.</p>
         <div class="table-scroll">
           <table id="disetorTable">
-            <thead><tr><th>Email</th><th>Disetor Pada</th><th>Sisa Waktu</th></tr></thead>
+            <thead><tr><th>Username</th><th>Email</th><th>Disetor Pada</th><th>Sisa Waktu</th></tr></thead>
             <tbody id="disetorTableBody"></tbody>
           </table>
         </div>

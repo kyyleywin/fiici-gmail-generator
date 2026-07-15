@@ -113,7 +113,7 @@ function syncEmailsUpsert(items){
   syncToSheet('email_upsert', {
     userId: currentUser.userId,
     username: currentUser.username,
-    items: items.map(e=>({ id:e.id, username:e.username, address:e.address, firstName:e.firstName||'', lastName:e.lastName||'', status:e.status, saved:!!e.saved, expired:!!e.expired, expiredAt: e.expiredAt ? (e.expiredAt instanceof Date ? e.expiredAt.getTime() : e.expiredAt) : null, disetor:!!e.disetor, disetorAt: e.disetorAt ? (e.disetorAt instanceof Date ? e.disetorAt.getTime() : e.disetorAt) : null, createdAt: e.createdAt instanceof Date ? e.createdAt.getTime() : e.createdAt }))
+    items: items.map(e=>({ id:e.id, username:e.username, address:e.address, status:e.status, saved:!!e.saved, expired:!!e.expired, expiredAt: e.expiredAt ? (e.expiredAt instanceof Date ? e.expiredAt.getTime() : e.expiredAt) : null, disetor:!!e.disetor, disetorAt: e.disetorAt ? (e.disetorAt instanceof Date ? e.disetorAt.getTime() : e.disetorAt) : null, createdAt: e.createdAt instanceof Date ? e.createdAt.getTime() : e.createdAt }))
   });
 }
 function syncEmailsDelete(ids){
@@ -136,11 +136,10 @@ async function syncEmailsFromServer(){
     d.items.forEach(it=>{
       const local = localMap.get(it.id);
       if(!local){
-        emails.push({ id:it.id, username:it.username, address:it.address, firstName:it.firstName||'', lastName:it.lastName||'', status:it.status||'created', saved:!!it.saved, expired:!!it.expired, expiredAt:it.expiredAt?new Date(it.expiredAt):null, disetor:!!it.disetor, disetorAt:it.disetorAt?new Date(it.disetorAt):null, createdAt:new Date(it.createdAt||Date.now()) });
+        emails.push({ id:it.id, username:it.username, address:it.address, status:it.status||'created', saved:!!it.saved, expired:!!it.expired, expiredAt:it.expiredAt?new Date(it.expiredAt):null, disetor:!!it.disetor, disetorAt:it.disetorAt?new Date(it.disetorAt):null, createdAt:new Date(it.createdAt||Date.now()) });
         changed = true;
       } else {
         if(local.username!==it.username || local.address!==it.address){ local.username=it.username; local.address=it.address; changed=true; }
-        if((it.firstName && local.firstName!==it.firstName) || (it.lastName && local.lastName!==it.lastName)){ local.firstName=it.firstName||local.firstName; local.lastName=it.lastName||local.lastName; changed=true; }
         if(it.status==='loggedin' && local.status!=='loggedin'){
           // status di server sudah Login -> jangan biarkan device ini mundur ke status lama
           local.status = 'loggedin'; changed = true;
@@ -899,18 +898,6 @@ function syncLocalUserToSheet(){
    GENERATION
 ══════════════════════════════ */
 const NAME_POOL = [
-  // Nama Indonesia
-  'budi','siti','agus','dewi','joko','rina','wahyu','fajar','putri','bagus',
-  'ayu','dedi','indra','yanti','hendra','maya','rizky','sinta','arif','wulan',
-  'eko','fitri','gunawan','hesti','ilham','juwita','kurnia','lina','maulana','nia',
-  'oki','puji','rian','sari','taufik','umi','vino','wati','yusuf','zahra',
-  'bambang','citra','doni','elin','farhan','gita','hadi','ika','jamal','karin',
-  // Nama Barat
-  'james','michael','robert','david','william','joseph','daniel','matthew','anthony','mark',
-  'steven','andrew','justin','kevin','brian','george','edward','jason','ryan','jacob',
-  'emma','olivia','sophia','isabella','charlotte','amelia','harper','evelyn','abigail','emily',
-  'elizabeth','madison','avery','ella','scarlett','grace','chloe','victoria','riley','aria',
-  'lily','natalie','hannah','audrey','claire','eleanor','stella','violet','mila','caroline',
   // Anime & Manga (nama karakter, bukan judul)
   'naruto','sasuke','sakura','kakashi','itachi','hinata','gaara','shikamaru','boruto','minato',
   'luffy','zoro','nami','sanji','usopp','chopper','robin','franky','brook','jinbe','ace','sabo','shanks','kaido','garp',
@@ -946,6 +933,24 @@ const NAME_POOL = [
   'monkeydluffy','roronoazoro','nicorobin','kamadotanjiro','kochouhinatsuru','agatsumazenitsu',
   'itadoriyuuji','fushiguro','gojousatoru','kugisaki','denjichainsaw','powerdevil','ayamakima',
   'yorforger','anyaforger','loidforger','edwardelric','alphonseelric','satoukazuma',
+  // Manhwa (komik Korea) — nama karakter
+  'sungjinwoo','chahaein','gosunghyun','yoosungchul','igris','beru','tusk','kimchul','baekyoonho',
+  'baam','khun','rachel','endorsi','anaak','rak','hwaryun','evankhun',
+  'arthurleywin','tessia','sylvie','lloydframpton','curtis','reynolds',
+  'kimdokja','yoojoonghyuk','jiheewon','yookyunghoon',
+  'raizel','frankenstein','muzaka','regis','seira','takeo','rael','tao',
+  'jinmori','mira','daewi','mihyun',
+  'parkhyungseok','danielpark','zackestia','vasco','jake','samuelseo','jinsung',
+  'chahyunsoo','leeeunhyeok','yoonjisoo','pyeonsangwook','leeeunyoo',
+  'limjukyung','leesuho','hanseojun',
+  // Manhua (komik China) — nama karakter
+  'nieli','xiaoyu','duling','yeziyun',
+  'xiaoyan','xuner','yaochen','nalanyanran','yunyun','haibodong',
+  'tangsan','xiaowu','daimubai','mahongjun','oscar','ningrongrong','zhuzhuqing',
+  'yexiu','sumucheng','tangrou','sunxiang','wangjiexi','huangshaotian','zhouzekai',
+  'linley','yalebedford','reynoldsclayton','nina','delia',
+  'yunche','yunxinyue','yunqinghong','chuyuechan','qianyeyinger',
+  'yangkai','suyan','wangling','liqiye',
   // Genshin Impact — nama karakter
   'diluc','kaeya','venti','klee','zhongli','xiao','hutao','ganyu','albedo','ayaka','ayato','yoimiya',
   'itto','gorou','yaemiko','raidenshogun','nahida','alhaitham','cyno','nilou','wanderer','scaramouche',
@@ -960,31 +965,16 @@ const NAME_POOL = [
   'rover','jiyan','encore','verina','calcharo','jinhsi','changli','yinlin','xiangliyao','zhezhi',
   'danjin','mortefi','baizhi','sanhua','chixia','taoqi','yangyang','aalto','lingyang','camellya',
   'carlotta','cantarella','roccia','phoebe','brant','cartethyia','shorekeeper','youhu','ciaccona','galbrena',
+  // Honkai Impact 3rd — nama karakter
+  'kiana','mei','bronya','himeko','fuhua','theresa','seele','sirin','rita','durandal',
+  'elysia','kallen2','raidenmei','villv','welt','otto2','kevin','aponia',
   // Honkai Star Rail — nama karakter
   'march7th','danheng','kafka','silverwolf','blade','jingliu','herta','sushang','gepard','natasha',
   'pela','arlan','serval','tingyun','luocha','yanqing','bailu','sampo','hook','clara',
   'svarog','ratio','aventurine','topaz','blackswan','sunday','robin2','boothill','firefly','misha',
   'jade','gallagher','jiaoqiu','feixiao','moze','lingsha','rappa','tribbie','hyacine','mydei',
-  'castorice','cipher','anaxa','phainon',
-  // Blue Archive — nama karakter
-  'hoshino','shiroko','serika','momoi','midori','yuuka','hina','asuna','ako','chinatsu',
-  'iroha','hifumi','izuna','junko','miyako','mari','saki','sumire','koharu','moe',
-  'nagisa','kotori','karin','wakamo','miyu','rin','koyuki','hasumi','hare','airi',
-  'noa','kayoko','izumi','ushio','wakana','yukino','toki','neru','misaki','haruka',
-  'nozomi','plana','shun','aru','nonomi','mika','ayane','iori','shizuko'
+  'castorice','cipher','anaxa','phainon'
 ];
-/* ── Pool Nama Depan & Nama Belakang (identitas untuk isi form Nama saat login Gmail),
-   TERPISAH dari NAME_POOL di atas (yang dipakai untuk bagian username/alamat email). ── */
-const LAST_NAME_POOL = [
-  'Saputra','Wijaya','Kusuma','Pratama','Santoso','Hidayat','Kurniawan','Setiawan','Firmansyah','Gunawan',
-  'Permadi','Utomo','Nugraha','Suryanto','Wibowo','Handoko','Yulianto','Wardana','Susanto','Kusnadi',
-  'Ramadhan','Hartono','Siregar','Nasution','Simatupang','Pasaribu','Situmorang','Halim','Sanjaya','Budianto',
-  'Rahman','Maulana','Iskandar','Prasetya','Suherman','Tanjung','Wahyudi','Zulkarnain','Efendi','Rusdi',
-  'Lubis','Panjaitan','Simanjuntak','Marpaung','Sihombing','Batubara','Harahap','Damanik','Sitompul','Manurung'
-];
-function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
-
 /* ── Nama yang sudah dipakai pada email yang sudah Success/Disetor, disimpan permanen
    supaya nama itu tidak dipilih lagi walau emailnya nanti sudah otomatis terhapus
    dari menu Disetor setelah 15 hari. ── */
@@ -1034,9 +1024,7 @@ function generateEmails(){
       username=`${prefix}${picked.text}${suffix}`; address=`${username}@gmail.com`;
     }
     while(emails.some(e=>e.address===address));
-    const firstName = capitalize(baseName);
-    const lastName  = capitalize(pickRandom(LAST_NAME_POOL));
-    const item = {id:crypto.randomUUID(),username,address,baseName,firstName,lastName,status:'created',saved:false,expired:false,expiredAt:null,disetor:false,disetorAt:null,createdAt:new Date()};
+    const item = {id:crypto.randomUUID(),username,address,baseName,status:'created',saved:false,expired:false,expiredAt:null,disetor:false,disetorAt:null,createdAt:new Date()};
     emails.unshift(item);
     created.push(item);
     excludeSet.add(baseName); // biar dalam 1x generate banyak email, nama yang baru dipakai juga tidak dobel
@@ -1309,7 +1297,7 @@ function renderTable(){
   renderStats();
   const search=document.getElementById('searchBox').value.toLowerCase();
   const allDaftar=emails.filter(e=>!e.saved);
-  const list=allDaftar.filter(e=>(e.address.toLowerCase().includes(search)||(e.firstName||'').toLowerCase().includes(search)||(e.lastName||'').toLowerCase().includes(search)));
+  const list=allDaftar.filter(e=>(e.address.toLowerCase().includes(search)||e.username.toLowerCase().includes(search)));
 
   // Badge notifikasi jumlah email di menu Daftar (sama kayak badge di menu Simpan),
   // dihitung dari semua email yg belum tersimpan, tidak ikut kepengaruh oleh kotak pencarian.
@@ -1329,8 +1317,7 @@ function renderTable(){
           <input type="checkbox" class="row-check" data-id="${e.id}" onclick="updateBulkBar()">
           <span class="badge ${e.status==='loggedin'?'loggedin':'created'}"><span class="dot"></span>${e.status==='loggedin'?'Login':'Proses'}</span>
         </div>
-        <div class="email-card-row"><span class="email-card-label">Nama Depan</span><span class="copy-chip" onclick="copyText('${e.firstName||''}',this)"><span class="icon">⧉</span>${e.firstName||'-'}</span></div>
-        <div class="email-card-row"><span class="email-card-label">Nama Belakang</span><span class="copy-chip" onclick="copyText('${e.lastName||''}',this)"><span class="icon">⧉</span>${e.lastName||'-'}</span></div>
+        <div class="email-card-row"><span class="email-card-label">Username</span><span class="copy-chip" onclick="copyText('${e.username}',this)"><span class="icon">⧉</span>${e.username}</span></div>
         <div class="email-card-row"><span class="email-card-label">Email</span><span class="copy-chip" onclick="copyText('${e.address}',this)"><span class="icon">⧉</span>${e.address}</span></div>
         <div class="actions">
           ${e.status==='loggedin'
@@ -1358,6 +1345,7 @@ function renderSavedTable(){
     empty.style.display='none'; document.getElementById('savedTable').style.display='table';
     body.innerHTML=list.map(e=>`
       <tr>
+        <td><span class="copy-chip" onclick="copyText('${e.username}',this)"><span class="icon">⧉</span>${e.username}</span></td>
         <td><span class="copy-chip" onclick="copyText('${e.address}',this)"><span class="icon">⧉</span>${e.address}</span></td>
         <td><span class="badge ${e.status==='loggedin'?'loggedin':'created'}"><span class="dot"></span>${e.status==='loggedin'?'Success':'Proses'}</span></td>
         <td><div class="actions"><span class="locked-note">🔒 Terkunci</span><button class="ghost" onclick="confirmMarkExpired('${e.id}')">Session Expired</button><button onclick="confirmSetorEmail('${e.id}')">Setor</button></div></td>
@@ -1439,6 +1427,7 @@ function renderDisetorTable(){
     empty.style.display='none'; document.getElementById('disetorTable').style.display='table';
     body.innerHTML=list.map(e=>`
       <tr>
+        <td><span class="copy-chip" onclick="copyText('${e.username}',this)"><span class="icon">⧉</span>${e.username}</span></td>
         <td><span class="copy-chip" onclick="copyText('${e.address}',this)"><span class="icon">⧉</span>${e.address}</span></td>
         <td>${fmtDate(e.disetorAt)}</td>
         <td><span class="locked-note">${daysLeftText(e.disetorAt)}</span></td>
@@ -1497,6 +1486,7 @@ function renderExpiredTable(){
     empty.style.display='none'; document.getElementById('expiredTable').style.display='table';
     body.innerHTML=list.map(e=>`
       <tr>
+        <td><span class="copy-chip" onclick="copyText('${e.username}',this)"><span class="icon">⧉</span>${e.username}</span></td>
         <td><span class="copy-chip" onclick="copyText('${e.address}',this)"><span class="icon">⧉</span>${e.address}</span></td>
         <td>${fmtDateTime(e.expiredAt)}</td>
         <td><span class="locked-note" style="color:#e53935;">${hoursLeftText(e.expiredAt)}</span></td>
