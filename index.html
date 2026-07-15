@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Fiici Gmail Generator</title>
+<link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kyyleywin/Image/refs/heads/main/IMG-20260605-WA0000.jpg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── AUTH SCREEN ── -->
+<div id="authScreen" class="auth-screen">
+
+  <!-- LOGIN -->
+  <div class="auth-card" id="loginCard">
+    <div class="auth-brand">
+      <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M3 6.5 L12 13 L21 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Fiici Gmail Generator</h1>
+    </div>
+    <h2 class="auth-title">Masuk</h2>
+    <div class="field">
+      <label class="field-label">Username</label>
+      <input type="text" id="loginUsername" placeholder="Masukan username" autocomplete="username">
+    </div>
+    <div class="field">
+      <label class="field-label">Password</label>
+      <div class="input-icon-wrap">
+        <input type="password" id="loginPassword" placeholder="Masukan password" autocomplete="current-password">
+        <button type="button" class="input-icon-btn" onclick="togglePw('loginPassword',this)" aria-label="Tampilkan password">
+          <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+    <p class="auth-error" id="loginError"></p>
+    <label class="keep-login-label">
+      <input type="checkbox" id="keepLogin" checked>
+      <span>Tetap login (ingat saya)</span>
+    </label>
+    <button class="primary auth-btn" onclick="doLogin()">Masuk</button>
+    <p class="auth-switch">Belum punya akun? <span onclick="showRegister()">Daftar sekarang</span></p>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="auth-card" id="registerCard" style="display:none;">
+    <div class="auth-brand">
+      <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M3 6.5 L12 13 L21 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Fiici Gmail Generator</h1>
+    </div>
+    <h2 class="auth-title">Daftar Akun</h2>
+    <div class="field">
+      <label class="field-label">Username <span class="field-hint">huruf kecil, tanpa spasi</span></label>
+      <input type="text" id="regUsername" placeholder="Contoh: johndoe123" autocomplete="username" oninput="this.value=this.value.replace(/[^a-z0-9_]/g,'').toLowerCase()">
+    </div>
+    <div class="field">
+      <label class="field-label">Nama Lengkap</label>
+      <input type="text" id="regName" placeholder="Masukan nama lengkap">
+    </div>
+    <div class="field">
+      <label class="field-label">Email</label>
+      <input type="email" id="regEmail" placeholder="Masukan email" autocomplete="email">
+    </div>
+    <div class="field">
+      <label class="field-label">No. WhatsApp</label>
+      <input type="tel" id="regWa" placeholder="Contoh: 08123456789" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    </div>
+    <div class="field">
+      <label class="field-label">Password</label>
+      <div class="input-icon-wrap">
+        <input type="password" id="regPassword" placeholder="Min. 6 karakter" autocomplete="new-password">
+        <button type="button" class="input-icon-btn" onclick="togglePw('regPassword',this)" aria-label="Tampilkan password">
+          <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="field-label">Konfirmasi Password</label>
+      <div class="input-icon-wrap">
+        <input type="password" id="regPassword2" placeholder="Ulangi password" autocomplete="new-password">
+        <button type="button" class="input-icon-btn" onclick="togglePw('regPassword2',this)" aria-label="Tampilkan password">
+          <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="field captcha-field">
+      <label class="field-label">Verifikasi: <span id="captchaQuestion"></span></label>
+      <div class="captcha-row">
+        <input type="number" id="captchaAnswer" placeholder="Jawaban">
+        <button type="button" class="captcha-refresh" onclick="refreshCaptcha()" title="Ganti soal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </div>
+    </div>
+    <p class="auth-error" id="registerError"></p>
+    <button class="primary auth-btn" onclick="doRegister()">Kirim Kode OTP via WA</button>
+    <p class="auth-switch">Sudah punya akun? <span onclick="showLogin()">Masuk</span></p>
+  </div>
+
+  <!-- OTP VERIFICATION -->
+  <div class="auth-card" id="otpCard" style="display:none;">
+    <div class="auth-brand">
+      <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M3 6.5 L12 13 L21 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Fiici Gmail Generator</h1>
+    </div>
+    <h2 class="auth-title">Verifikasi WhatsApp</h2>
+    <p class="otp-info">Kode OTP telah dikirim ke WhatsApp <b id="otpWaDisplay"></b>. Masukan kode 6 digit berikut:</p>
+    <div class="otp-inputs" id="otpInputs">
+      <input class="otp-digit" maxlength="1" type="tel" oninput="otpInput(this,0)" onkeydown="otpKey(event,0)">
+      <input class="otp-digit" maxlength="1" type="tel" oninput="otpInput(this,1)" onkeydown="otpKey(event,1)">
+      <input class="otp-digit" maxlength="1" type="tel" oninput="otpInput(this,2)" onkeydown="otpKey(event,2)">
+      <input class="otp-digit" maxlength="1" type="tel" oninput="otpInput(this,3)" onkeydown="otpKey(event,3)">
+      <input class="otp-digit" maxlength="1" type="tel" oninput="otpInput(this,4)" onkeydown="otpKey(event,4)">
+      <input class="otp-digit" maxlength="1" type="tel" oninput="otpInput(this,5)" onkeydown="otpKey(event,5)">
+    </div>
+    <p class="auth-error" id="otpError"></p>
+    <p class="otp-timer" id="otpTimer"></p>
+    <button class="primary auth-btn" onclick="verifyOtp()">Verifikasi & Daftar</button>
+    <p class="auth-switch" id="otpResendRow" style="display:none;"><span onclick="resendOtp()">Kirim ulang kode OTP</span></p>
+    <p class="auth-switch"><span onclick="showRegister()">← Kembali ke form daftar</span></p>
+  </div>
+
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="appScreen" style="display:none;">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M3 6.5 L12 13 L21 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Fiici Gmail Generator</h1>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <h3 id="confirmTitle">Konfirmasi</h3>
+      <p id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button class="ghost" onclick="closeConfirmModal()" id="confirmNoBtn">Tidak</button>
+        <button class="btn-danger" id="confirmDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirm-overlay" id="successOverlay">
+    <div class="confirm-box success-box">
+      <div class="success-check-wrap">
+        <svg class="success-check" viewBox="0 0 80 80">
+          <circle class="success-check-circle" cx="40" cy="40" r="36"/>
+          <path class="success-check-mark" d="M24 41 L35 52 L57 28"/>
+        </svg>
+      </div>
+      <h3 class="success-title">Berhasil</h3>
+      <div class="confirm-actions" style="justify-content:center;">
+        <button class="btn-ok" onclick="closeSuccessModal()">Oke</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirm-overlay" id="alertOverlay">
+    <div class="confirm-box alert-box">
+      <div class="alert-icon-wrap">
+        <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16.5" x2="12" y2="16.51"/>
+        </svg>
+      </div>
+      <h3 class="alert-title" id="alertTitle">Pemberitahuan</h3>
+      <p id="alertMessage"></p>
+      <div class="confirm-actions" style="justify-content:center;">
+        <button class="btn-ok" onclick="closeAlertModal()">Oke</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Dashboard -->
+    <div class="panel view-section active-view" id="dashboard">
+      <h2>Dashboard</h2>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <!-- Tambah Email -->
+    <div class="panel view-section" id="tambah">
+      <h2>Buat Email Baru</h2>
+      <div class="row">
+        <div class="field" style="max-width:220px;">
+          <label class="field-label">Prefix (opsional)</label>
+          <input type="text" id="genPrefix" placeholder="Masukan nama">
+        </div>
+        <div class="field" style="max-width:220px;">
+          <label class="field-label">Akhiran (opsional)</label>
+          <input type="text" id="genSuffix" placeholder="Masukan akhiran">
+        </div>
+        <div class="field" style="max-width:170px;">
+          <label class="field-label">Jumlah dibuat</label>
+          <div class="stepper">
+            <button type="button" class="stepper-btn" onclick="adjustGenCount(-1)">−</button>
+            <input type="number" id="genCount" min="1" max="50" value="1">
+            <button type="button" class="stepper-btn" onclick="adjustGenCount(1)">+</button>
+          </div>
+        </div>
+        <div class="field" style="flex:0;">
+          <label class="field-label">&nbsp;</label>
+          <button class="primary" onclick="generateEmails()">+ Buat Email</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daftar Gmail -->
+    <div class="panel view-section" id="daftar">
+      <h2>Daftar Gmail</h2>
+      <div class="row" style="margin-bottom:14px;">
+        <div class="field">
+          <input type="text" id="searchBox" placeholder="Cari email, nama depan, atau nama belakang..." oninput="renderTable()">
+        </div>
+      </div>
+      <div class="list-toolbar">
+        <label class="select-all-row"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"> Pilih semua</label>
+      </div>
+      <div id="emailTable" class="email-list">
+        <div id="tableBody" class="email-list-body"></div>
+      </div>
+      <div id="emptyState" class="empty" style="display:none;">Belum ada email. Buat email baru di menu "Tambah Email".</div>
+      <div class="row" id="bulkActions" style="display:none; margin-top:14px;">
+        <button onclick="confirmBulkFinish()">Tandai Terpilih: Success</button>
+        <button class="ghost" onclick="confirmBulkDelete()">Hapus Terpilih</button>
+      </div>
+    </div>
+
+    <!-- Email Tersimpan -->
+    <div class="view-section" id="simpan">
+      <div class="panel sub-card">
+        <h2>Email Tersimpan</h2>
+        <p class="small-note" style="margin-top:0;">Email yang sudah ditandai <b>Success</b> pada daftar email akan otomatis pindah dan terkunci di sini. Kalau akunnya tiba-tiba nonaktif/keluar sendiri, tandai <b>Session Expired</b>. Kalau aman, langsung <b>Setor</b> ke menu <b>Sudah Disetor</b>.</p>
+        <div class="table-scroll">
+          <table id="savedTable">
+            <thead><tr><th>Email</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="savedTableBody"></tbody>
+          </table>
+        </div>
+        <div id="savedEmptyState" class="empty" style="display:none;">Belum ada email yang disimpan.</div>
+      </div>
+
+      <!-- List Gmail saja (tanpa username), buat disalin sekaligus -- kotak terpisah -->
+      <div class="panel sub-card" id="savedGmailOnlyBlock" style="display:none;">
+        <div class="row" style="align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <h2 style="margin:0;">List Gmail Tersimpan</h2>
+          <button class="primary" onclick="copyAllSavedGmails()">⧉ Salin Semua</button>
+        </div>
+        <p class="small-note" style="margin-top:0;">Hanya alamat Gmail (tanpa username) — klik tombol di atas untuk salin semuanya sekaligus.</p>
+        <div id="savedGmailOnlyList" class="gmail-only-list"></div>
+      </div>
+    </div>
+
+    <!-- Session Expired -->
+    <div class="view-section" id="expired">
+      <div class="panel sub-card">
+        <h2>Session Expired</h2>
+        <p class="small-note" style="margin-top:0;">Email yang ditandai <b>Session Expired</b> dari menu <b>Email Tersimpan</b> akan <b>otomatis terhapus permanen dalam 24 jam</b> kalau tidak segera di-<b>Setor</b> atau <b>Pulihkan</b> kembali ke Tersimpan.</p>
+        <div class="table-scroll">
+          <table id="expiredTable">
+            <thead><tr><th>Email</th><th>Ditandai Pada</th><th>Sisa Waktu</th><th>Aksi</th></tr></thead>
+            <tbody id="expiredTableBody"></tbody>
+          </table>
+        </div>
+        <div id="expiredEmptyState" class="empty" style="display:none;">Belum ada email yang Session Expired.</div>
+      </div>
+    </div>
+
+    <!-- Sudah Disetor -->
+    <div class="view-section" id="disetor">
+      <div class="panel sub-card">
+        <h2>Sudah Disetor</h2>
+        <p class="small-note" style="margin-top:0;">Email yang dipindahkan dari menu <b>Email Tersimpan</b> ke sini akan <b>otomatis terhapus setelah 15 hari</b> sejak dipindahkan.</p>
+        <div class="table-scroll">
+          <table id="disetorTable">
+            <thead><tr><th>Email</th><th>Disetor Pada</th><th>Sisa Waktu</th></tr></thead>
+            <tbody id="disetorTableBody"></tbody>
+          </table>
+        </div>
+        <div id="disetorEmptyState" class="empty" style="display:none;">Belum ada email yang disetor.</div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="panel view-section" id="profile">
+      <h2>Profil</h2>
+      <div class="profile-header">
+        <div class="profile-avatar-wrap" onclick="document.getElementById('photoInput').click()" title="Ganti foto profil">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="profile-avatar-overlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div class="profile-avatar-edit-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          </div>
+          <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+        </div>
+        <div>
+          <div class="profile-name" id="profileName"></div>
+          <div class="profile-meta" id="profileMeta"></div>
+        </div>
+      </div>
+      <div class="profile-stats" id="profileStats"></div>
+
+      <div class="profile-divider"></div>
+      <div class="profile-section-title">Edit Profil</div>
+      <div class="field">
+        <label class="field-label">Nama Lengkap</label>
+        <input type="text" id="editName" placeholder="Nama lengkap">
+      </div>
+      <p class="auth-error" id="editProfileError"></p>
+      <button onclick="saveProfileEdit()" style="margin-bottom:4px;">Simpan Perubahan</button>
+
+      <div class="profile-divider"></div>
+      <div class="profile-section-title">Ganti Password</div>
+      <div class="field">
+        <label class="field-label">Password Lama</label>
+        <div class="input-icon-wrap">
+          <input type="password" id="oldPassword" placeholder="Masukan password lama" autocomplete="current-password">
+          <button type="button" class="input-icon-btn" onclick="togglePw('oldPassword',this)">
+            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">Password Baru</label>
+        <div class="input-icon-wrap">
+          <input type="password" id="newPassword" placeholder="Password baru">
+          <button type="button" class="input-icon-btn" onclick="togglePw('newPassword',this)">
+            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">Konfirmasi Password Baru</label>
+        <div class="input-icon-wrap">
+          <input type="password" id="newPassword2" placeholder="Ulangi password baru">
+          <button type="button" class="input-icon-btn" onclick="togglePw('newPassword2',this)">
+            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <p class="auth-error" id="changePassError"></p>
+      <div class="row" style="gap:10px; margin-top:4px;">
+        <button onclick="changePassword()">Simpan Password</button>
+        <button class="btn-logout" onclick="doLogout()">Keluar</button>
+      </div>
+
+      <div class="profile-divider"></div>
+      <div class="profile-section-title">Verifikasi WhatsApp</div>
+      <div id="waVerifSection">
+        <!-- diisi oleh renderProfile() -->
+      </div>
+
+      <div class="profile-divider"></div>
+      <div class="profile-section-title danger">Zona Berbahaya</div>
+      <p class="small-note" style="color:var(--muted); margin-bottom:12px;">Menghapus akun akan menghapus semua data kamu secara permanen. Nomor WA yang digunakan bisa didaftarkan ulang setelah akun dihapus.</p>
+      <button class="btn-logout" onclick="confirmDeleteAccount()">Hapus Akun Saya</button>
+    </div>
+
+  </div>
+
+  <!-- WA OTP Profile Modal -->
+  <div class="confirm-overlay" id="waOtpOverlay">
+    <div class="confirm-box" style="text-align:center;">
+      <h3>Verifikasi WhatsApp</h3>
+      <p id="waOtpInfo" style="font-size:0.88rem; color:var(--muted); margin-bottom:16px;"></p>
+      <div class="otp-inputs" id="waOtpInputs">
+        <input class="otp-digit" maxlength="1" type="tel" oninput="waOtpInput(this,0)" onkeydown="waOtpKey(event,0)">
+        <input class="otp-digit" maxlength="1" type="tel" oninput="waOtpInput(this,1)" onkeydown="waOtpKey(event,1)">
+        <input class="otp-digit" maxlength="1" type="tel" oninput="waOtpInput(this,2)" onkeydown="waOtpKey(event,2)">
+        <input class="otp-digit" maxlength="1" type="tel" oninput="waOtpInput(this,3)" onkeydown="waOtpKey(event,3)">
+        <input class="otp-digit" maxlength="1" type="tel" oninput="waOtpInput(this,4)" onkeydown="waOtpKey(event,4)">
+        <input class="otp-digit" maxlength="1" type="tel" oninput="waOtpInput(this,5)" onkeydown="waOtpKey(event,5)">
+      </div>
+      <p class="auth-error" id="waOtpError"></p>
+      <p class="otp-timer" id="waOtpTimer"></p>
+      <div class="confirm-actions" style="justify-content:center; gap:10px;">
+        <button class="ghost" onclick="closeWaOtpModal()">Batal</button>
+        <button class="btn-ok" onclick="verifyWaOtp()">Verifikasi</button>
+      </div>
+      <p style="font-size:0.8rem; margin-top:10px;" id="waOtpResendRow" style="display:none;"><span onclick="resendWaOtp()" style="color:var(--purple); cursor:pointer;">Kirim ulang kode</span></p>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bn-item" data-section="tambah" onclick="goSection('tambah')" aria-label="Tambah Email">
+      <span class="bn-circle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></span>
+    </button>
+    <button class="bn-item" data-section="daftar" onclick="goSection('daftar')" aria-label="Daftar Gmail">
+      <span class="bn-circle bn-circle-badge-wrap">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+        <span class="bn-badge" id="daftarBadge" style="display:none;">0</span>
+      </span>
+    </button>
+    <button class="bn-item" data-section="dashboard" onclick="goSection('dashboard')" aria-label="Dashboard">
+      <span class="bn-circle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></span>
+    </button>
+    <button class="bn-item" data-section="simpan" onclick="goSection('simpan')" aria-label="Email Tersimpan">
+      <span class="bn-circle bn-circle-badge-wrap">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+        <span class="bn-badge" id="savedBadge" style="display:none;">0</span>
+      </span>
+    </button>
+    <button class="bn-item" data-section="expired" onclick="goSection('expired')" aria-label="Session Expired">
+      <span class="bn-circle bn-circle-badge-wrap">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>
+        <span class="bn-badge" id="expiredBadge" style="display:none;">0</span>
+      </span>
+    </button>
+    <button class="bn-item" data-section="disetor" onclick="goSection('disetor')" aria-label="Sudah Disetor">
+      <span class="bn-circle bn-circle-badge-wrap">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18A3 3 0 0 0 12 3.11 3 3 0 0 0 6.18 6H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zM12 5a1 1 0 1 1-1 1 1 1 0 0 1 1-1zm4.3 6.3-5 5a1 1 0 0 1-1.42 0l-2-2a1 1 0 1 1 1.42-1.42L10.6 14.2l4.3-4.3a1 1 0 0 1 1.4 1.4z"/></svg>
+        <span class="bn-badge" id="disetorBadge" style="display:none;">0</span>
+      </span>
+    </button>
+    <button class="bn-item" data-section="profile" onclick="goSection('profile')" aria-label="Profile">
+      <span class="bn-circle" id="bnProfileCircle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>
+    </button>
+  </nav>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
